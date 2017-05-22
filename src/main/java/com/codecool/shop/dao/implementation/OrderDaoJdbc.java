@@ -3,6 +3,8 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.controller.DatabaseConnectionData;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.List;
  * Created by marti on 2017.05.16..
  */
 public class OrderDaoJdbc extends JdbcDao implements OrderDao {
-
+    private static final Logger logger = LoggerFactory.getLogger(OrderDaoJdbc.class);
     ProductDaoImplJdbc productJdbc = new ProductDaoImplJdbc();
     LineItemDaoImplJdbc lineItemJdbc = new LineItemDaoImplJdbc();
 
@@ -28,8 +30,10 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
             stmt.setString(1, order.getStatus().getValue());
             stmt.executeQuery();
             connection.close();
+            logger.info("Added {} id's Order to the db", order.getId());
         }
         catch (SQLException e) {
+            logger.debug("Can't add Orders to the db", e);
             e.printStackTrace();
         }
     }
@@ -55,6 +59,7 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
             return results;
         }
         catch (SQLException e) {
+            logger.debug("Can't find LineItem from the db", e);
             return null;
         }
     }
@@ -73,12 +78,14 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
                 Order order = new Order(resultSet.getString("order_name"),
                         findLineItems(id));
                 connection.close();
+                logger.info("Find {} id's Order to the db", id);
                 return order;
             }
             connection.close();
             return null;
         }
         catch (SQLException e) {
+            logger.debug("Can't find Order from the db", e);
             return null;
         }
     }
@@ -97,10 +104,10 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
             }
             stmt.executeUpdate();
             connection.close();
-
+            logger.info("Remove {} id's Order from the db", id);
         }
         catch (SQLException e) {
-            System.out.println("Order could not be removed.");
+            logger.debug("Can't remove Order from the db", e);
         }
     }
 
@@ -122,9 +129,11 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
                 results.add(order);
             }
             connection.close();
+            logger.info("Get all Orders from the db");
             return results;
         }
         catch (SQLException e) {
+            logger.debug("Can't get all Order from the db", e);
             return null;
         }
     }
@@ -137,29 +146,4 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
                 dbConn.getDbUser(),
                 dbConn.getDbPassword());
     }
-
-//    public static void main(String[] args) throws SQLException {
-//        OrderDaoJdbc shop = new OrderDaoJdbc();
-//        Supplier supplierExample = new Supplier("ebay", "ebay_desc");
-//        supplierExample.setId(1);
-//        ProductCategory productCategoryExample = new ProductCategory("sport", "department",
-//                "description");
-//        productCategoryExample.setId(2);
-//        Product productExample = new Product("prod_example", 123,
-//                "USD","desc",
-//                productCategoryExample, supplierExample);
-//        LineItem lineItemOne = new LineItem(productExample);
-//        LineItem lineItemTwo = new LineItem(productExample);
-//        List<LineItem> lineItemListExample = new ArrayList<>();
-//        lineItemListExample.add(lineItemOne);
-//        lineItemListExample.add(lineItemTwo);
-//        Order order = new Order("jh", lineItemListExample);
-//        Order orderTwo = new Order("kh", lineItemListExample);
-//        shop.add(order);
-//        System.out.println(shop.find(2));
-//        shop.remove(1);
-//        System.out.println(shop.getAll());
-//    }
-
-
 }

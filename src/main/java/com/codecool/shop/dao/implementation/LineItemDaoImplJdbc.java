@@ -4,8 +4,9 @@ import java.sql.*;
 import com.codecool.shop.controller.DatabaseConnectionData;
 import com.codecool.shop.dao.LineItemDao;
 import com.codecool.shop.model.LineItem;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by eszti on 2017.05.16..
  */
 public class LineItemDaoImplJdbc extends JdbcDao implements LineItemDao {
-
+    private static final Logger logger = LoggerFactory.getLogger(LineItemDaoImplJdbc.class);
     ProductDaoImplJdbc productJdbc = new ProductDaoImplJdbc();
 
     @Override
@@ -28,9 +29,10 @@ public class LineItemDaoImplJdbc extends JdbcDao implements LineItemDao {
             stmt.setInt(2, lineItem.getQuantity());
             stmt.setFloat(3, lineItem.getPrice());
             executeQuery(stmt.toString());
+            logger.info("Added {} id's LineItem to the db", lineItem.getId());
         }
         catch (SQLException e) {
-            System.out.println("LineItem could not be added to the database.");
+            logger.debug("Can't add LineItem to the db", e);
         }
     }
 
@@ -47,11 +49,13 @@ public class LineItemDaoImplJdbc extends JdbcDao implements LineItemDao {
             if (resultSet.next()) {
                 LineItem lineItem = new LineItem(productJdbc.find(
                         resultSet.getInt("product_id")));
+                logger.info("Get {} id's LineItem to the db", id);
                 return lineItem;
             }
             return null;
         }
         catch (SQLException e) {
+            logger.debug("Can't find LineItem from the db", e);
             return null;
         }
     }
@@ -65,9 +69,10 @@ public class LineItemDaoImplJdbc extends JdbcDao implements LineItemDao {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, id);
             executeQuery(stmt.toString());
+            logger.info("Remove {} id's LineItem from the db", id);
         }
         catch (SQLException e) {
-            System.out.println("LineItem could not be removed.");
+            logger.debug("Can't remove LineItem from the db", e);
         }
     }
 
@@ -88,9 +93,11 @@ public class LineItemDaoImplJdbc extends JdbcDao implements LineItemDao {
                 lineItem.setId(dbId);
                 results.add(lineItem);
             }
+            logger.info("Get all LineItem from the db");
             return results;
         }
         catch (SQLException e) {
+            logger.debug("Can't get all LineItem from the db", e);
             return null;
         }
     }

@@ -6,6 +6,8 @@ import com.codecool.shop.controller.ProductController;
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -15,6 +17,7 @@ import java.util.List;
 
 
 public class Main {
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static ProductDao productDataStore;
     private static LineItemDao lineItemDataStore;
@@ -178,6 +181,7 @@ public class Main {
         Product potato2 = new Product("Happy Potato", 3, "USD", "A potato who is very very happy.", potato, lajos);
         potato2.setId(4);
         productDataStore.add(potato2);
+        logger.info("Update the database/tables with examples data");
     }
 
 

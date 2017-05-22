@@ -5,6 +5,8 @@ import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
  * Created by keli on 2017.05.15..
  */
 public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
+    private static final Logger logger = LoggerFactory.getLogger(ProductDaoImplJdbc.class);
 
     @Override
     public void add(Product product){
@@ -31,8 +34,9 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
             stmt.setInt(6, product.getSupplier().getId());
             executeQuery(stmt.toString());
             connection.close();
+            logger.info("Added {} id's to the Product table", product.getId());
         } catch (SQLException e){
-            System.out.println("Couldn't add product");
+            logger.info("Couldn't added {} id's to the Product table", product.getId(), e);
         }
 
     }
@@ -55,13 +59,13 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
                         productCategoryDaoImplJdbc.find(resultSet.getInt("category_id")),
                         supplierDaoJdbc.find(resultSet.getInt("supplier_id")));
                 product.setId(resultSet.getInt("id"));
+                logger.info("Find {} id's Product from the db", id);
                 return product;
             }
             connection.close();
         } catch (SQLException e){
-            System.out.println("Couldn't find product");
+            logger.debug("Couldn't find {} id's from the db", id,  e);
         }
-
         return null;
     }
 
@@ -74,8 +78,9 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
             stmt.setInt(1, id);
             executeQuery(stmt.toString());
             connection.close();
+            logger.info("Remove {} id's Product from the db", id);
         } catch (SQLException e){
-            System.out.println("Couldn't remove the product");
+            logger.debug("Couldn't remove the product", e);
         }
     }
 
@@ -100,8 +105,9 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
                 productList.add(product);
             }
             connection.close();
+            logger.info("Get all Product from the db");
         } catch (SQLException exception){
-            System.out.println("Couldn't get all product");
+            logger.debug("Can't get all Products from the db", exception);
         }
         return productList;
     }
@@ -128,8 +134,9 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
                 productList.add(product);
             }
             connection.close();
+            logger.info("Get Product from {} supplier's id", supplier.getId());
         } catch (SQLException e){
-            System.out.println("Cannot get products by supplier");
+            logger.debug("Can't find ProductCategory from {} id's supplier", supplier.getId() , e);
         }
         return productList;
     }
@@ -156,8 +163,9 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
                 productListByCategory.add(product);
             }
             connection.close();
+            logger.info("Get Product from {} productsCategory's id", productCategory.getId());
         } catch (SQLException e){
-            System.out.println("Cannot get products by product category");
+            logger.debug("Can't find ProductCategory from {} id's category", productCategory.getId() , e);
         }
         return productListByCategory;
     }

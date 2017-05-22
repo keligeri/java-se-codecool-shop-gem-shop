@@ -2,11 +2,15 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by keli on 2017.05.18..
  */
 public class DaoProvider {
+    private static final Logger logger = LoggerFactory.getLogger(DaoProvider.class);
+
     public static ProductDao productDao;
     public static LineItemDao lineItemDao;
     public static OrderDao orderDao;
@@ -24,6 +28,7 @@ public class DaoProvider {
         orderDao = new OrderDaoJdbc();
         productCategoryDao = new ProductCategoryDaoImplJdbc();
         supplierDao = new SupplierDaoJdbc();
+        logger.info("Setup instances to DaoJdbc");
     }
 
     private static void setupDaoMem(){
@@ -32,5 +37,6 @@ public class DaoProvider {
         orderDao = OrderDaoMem.getInstance();
         productCategoryDao = ProductCategoryDaoMem.getInstance();
         supplierDao = SupplierDaoMem.getInstance();
+        logger.info("Setup instances to DaoMem");
     }
 }

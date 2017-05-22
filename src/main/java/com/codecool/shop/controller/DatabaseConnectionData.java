@@ -1,6 +1,8 @@
 package com.codecool.shop.controller;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +17,7 @@ import java.util.Scanner;
  * Created by eszti on 2017.05.15..
  */
 public class DatabaseConnectionData {
-
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseConnectionData.class);
     private String filePath = "src/main/resources/";
     private String DB_URL;
     private String DB_NAME;
@@ -26,6 +28,7 @@ public class DatabaseConnectionData {
         try {
             setupUserAndPasswordFromFile(filePath);
         } catch (IOException e){
+            logger.debug("Can't connect to the db", e);
             e.printStackTrace();
         }
 

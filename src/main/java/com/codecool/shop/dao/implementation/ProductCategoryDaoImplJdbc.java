@@ -3,6 +3,8 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.controller.DatabaseConnectionData;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.model.ProductCategory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
@@ -15,6 +17,7 @@ import java.util.List;
 
 
 public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCategoryDao {
+    private static final Logger logger = LoggerFactory.getLogger(ProductDaoImplJdbc.class);
 
     @Override
     public void add(ProductCategory category) {
@@ -29,9 +32,10 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
             stmt.setString(3, category.getDescription());
             executeQuery(stmt.toString());
             connection.close();
+            logger.info("Added {} id's ProductCategory  to the db", category.getId());
         }
         catch (SQLException e) {
-            System.out.println("Category could not be added to the database.");
+            logger.debug("Can't add ProductCategory to the db", e);
         }
 
     }
@@ -56,9 +60,11 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
                 return category;
             }
             connection.close();
+            logger.info("Find {} id's productCategory from the db", id);
             return null;
         }
         catch (SQLException e) {
+            logger.debug("Can't find ProductCategory in the db", e);
             return null;
         }
     }
@@ -68,14 +74,15 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
 
         try {
             String query = "DELETE FROM categories WHERE id = ?";
-
             Connection connection = getConnection();
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, id);
             executeQuery(stmt.toString());
-            connection.close();}
+            connection.close();
+            logger.info("Remove {} id's ProductCategory  to the db", id);
+        }
         catch (SQLException e) {
-            System.out.println("Could not remove category from database.");
+            logger.debug("Can't remove ProductCategory from the db", e);
         }
 
     }
@@ -101,9 +108,11 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
                 results.add(category);
             }
             connection.close();
+            logger.info("Get all productCategory from the db");
             return results;
         }
         catch (SQLException e) {
+            logger.debug("Can't get all ProductCategory from the db", e);
             return null;
         }
     }
