@@ -2,6 +2,7 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.controller.DatabaseConnectionData;
 import com.codecool.shop.dao.ProductCategoryDao;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.ProductCategory;
 
 import java.io.IOException;
@@ -16,6 +17,11 @@ import java.util.List;
 
 public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCategoryDao {
 
+    /**
+     * Added the given {@link ProductCategory} to the database.
+     *
+     * @param category the added {@link ProductCategory}
+     */
     @Override
     public void add(ProductCategory category) {
         try {
@@ -36,6 +42,11 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
 
     }
 
+    /**
+     * Find the {@link ProductCategory} with the given id from the database.
+     *
+     * @param id the {@link ProductCategory}'s id
+     */
     @Override
     public ProductCategory find(int id)  {
         String query = "SELECT * FROM categories WHERE id = ?;";
@@ -63,6 +74,11 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
         }
     }
 
+    /**
+     * Remove the {@link ProductCategory} with the given id from the database.
+     *
+     * @param id the {@link ProductCategory}'s id
+     */
     @Override
     public void remove(int id) {
 
@@ -80,6 +96,11 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
 
     }
 
+    /**
+     * Get all {@link Order} int a List from the database.
+     *
+     * @return the all {@link Order} from the database
+     */
     @Override
     public List<ProductCategory> getAll() {
 
@@ -108,6 +129,12 @@ public class ProductCategoryDaoImplJdbc extends JdbcDao implements ProductCatego
         }
     }
 
+    /**
+     * Create a {@link DatabaseConnectionData} instance invoke the setup
+     * and add the returned value to the {@link DriverManager}.
+     *
+     * @throws SQLException so have to handle it
+     */
     @Override
     Connection getConnection() throws SQLException {
         DatabaseConnectionData dbConn = new DatabaseConnectionData("connection.properties");

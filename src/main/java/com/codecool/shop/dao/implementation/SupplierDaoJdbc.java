@@ -2,6 +2,8 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.controller.DatabaseConnectionData;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.model.Product;
+import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
 
 import java.sql.*;
@@ -13,6 +15,11 @@ import java.util.List;
  */
 public class SupplierDaoJdbc extends JdbcDao implements SupplierDao {
 
+    /**
+     * Added the given {@link Supplier} to the database.
+     *
+     * @param supplier the added {@link Supplier}
+     */
     @Override
     public void add(Supplier supplier) {
         try {
@@ -31,6 +38,11 @@ public class SupplierDaoJdbc extends JdbcDao implements SupplierDao {
 
     }
 
+    /**
+     * Find the {@link Supplier} with the given id from the database.
+     *
+     * @param id the {@link Supplier}'s id
+     */
     @Override
     public Supplier find(int id)  {
         String query = "SELECT * FROM suppliers WHERE id = ?;";
@@ -55,6 +67,11 @@ public class SupplierDaoJdbc extends JdbcDao implements SupplierDao {
         }
     }
 
+    /**
+     * Remove the {@link Supplier} with the given id from the database.
+     *
+     * @param id the {@link Supplier}'s id
+     */
     @Override
     public void remove(int id) {
 
@@ -72,6 +89,11 @@ public class SupplierDaoJdbc extends JdbcDao implements SupplierDao {
 
     }
 
+    /**
+     * Get all {@link Supplier} int a List from the database.
+     *
+     * @return the all {@link Supplier} from the database
+     */
     @Override
     public List<Supplier> getAll() {
 
@@ -97,6 +119,12 @@ public class SupplierDaoJdbc extends JdbcDao implements SupplierDao {
         }
     }
 
+    /**
+     * Create a {@link DatabaseConnectionData} instance invoke the setup
+     * and add the returned value to the {@link DriverManager}.
+     *
+     * @throws SQLException so have to handle it
+     */
     @Override
     Connection getConnection() throws SQLException {
         DatabaseConnectionData dbConn = new DatabaseConnectionData("connection.properties");

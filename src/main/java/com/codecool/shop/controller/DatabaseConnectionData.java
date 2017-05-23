@@ -1,7 +1,5 @@
 package com.codecool.shop.controller;
-
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
+import com.codecool.shop.dao.implementation.JdbcDao;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,8 +10,16 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by eszti on 2017.05.15..
+ * {@link DatabaseConnectionData} class responsible for config file reading
+ * and setup the required params for the connection.
+ * <p
+ * Read the necessary parameter from the config gile (resources/connection.properties)
+ * and setup the parsed parameter for the correct variables.
+ *
+ * @author gem
+ * @version 1.8
  */
+
 public class DatabaseConnectionData {
 
     private String filePath = "src/main/resources/";
@@ -22,6 +28,12 @@ public class DatabaseConnectionData {
     private String DB_USER;
     private String DB_PASSWORD;
 
+    /**
+     * Parse the config file and invoke the <code>setupUserAndPasswordFromFile(String fileName)</code> method.
+     * Catch the <code>IOException</code> exception.
+     *
+     * @param filePath the given path, where the files is found
+     */
     public DatabaseConnectionData(String filePath){
         try {
             setupUserAndPasswordFromFile(filePath);
@@ -43,6 +55,12 @@ public class DatabaseConnectionData {
         return DB_PASSWORD;
     }
 
+    /**
+     * Parse the config file and invoke the and setup the private variables without return anything.
+     *
+     * @param fileName the given path, where the files is found
+     * @throws IOException so have to handle it
+     */
     private void setupUserAndPasswordFromFile(String fileName) throws IOException{
         List<String> allLinesList = Files.readAllLines(Paths.get(filePath + fileName));
         DB_URL = allLinesList.get(0);

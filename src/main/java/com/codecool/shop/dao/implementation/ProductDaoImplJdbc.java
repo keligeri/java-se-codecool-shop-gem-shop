@@ -2,6 +2,7 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.controller.DatabaseConnectionData;
 import com.codecool.shop.dao.ProductDao;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
@@ -16,6 +17,11 @@ import java.util.List;
  */
 public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
 
+    /**
+     * Added the given {@link Product} to the database.
+     *
+     * @param product the added {@link ProductCategory}
+     */
     @Override
     public void add(Product product){
         String query = "INSERT INTO products (product_name, product_description, default_price, currency_id, " +
@@ -34,9 +40,13 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
         } catch (SQLException e){
             System.out.println("Couldn't add product");
         }
-
     }
 
+    /**
+     * Find the {@link Product} with the given id from the database.
+     *
+     * @param id the {@link Product}'s id
+     */
     @Override
     public Product find(int id) {
         ProductCategoryDaoImplJdbc productCategoryDaoImplJdbc = new ProductCategoryDaoImplJdbc();
@@ -65,6 +75,11 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
         return null;
     }
 
+    /**
+     * Remove the {@link Product} with the given id from the database.
+     *
+     * @param id the {@link Product}'s id
+     */
     @Override
     public void remove(int id){
         String query = "DELETE FROM products WHERE id = ?";
@@ -79,6 +94,12 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
         }
     }
 
+    /**
+     * Get all {@link Product} int a List from the database.
+     *
+     * @return the all {@link Product} from the database
+     */
+    @Override
     public List<Product> getAll() {
         ProductCategoryDaoImplJdbc productCategoryDaoImplJdbc = new ProductCategoryDaoImplJdbc();
         List<Product> productList = new ArrayList<>();
@@ -106,6 +127,11 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
         return productList;
     }
 
+    /**
+     * Get all {@link Product} from the given {@link Supplier}' id.
+     *
+     * @return all {@link Product} from the database, with the given {@link Supplier}' id
+     */
     @Override
     public List<Product> getBy(Supplier supplier) {
         ProductCategoryDaoImplJdbc productCategoryDaoImplJdbc = new ProductCategoryDaoImplJdbc();
@@ -134,6 +160,11 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
         return productList;
     }
 
+    /**
+     * Get all {@link Product} from the given {@link ProductCategory}' id.
+     *
+     * @return all {@link Product} from the database, with the given {@link ProductCategory}' id
+     */
     @Override
     public List<Product> getBy(ProductCategory productCategory) {
         List<Product> productListByCategory = new ArrayList<>();
@@ -162,6 +193,12 @@ public class ProductDaoImplJdbc extends JdbcDao implements ProductDao{
         return productListByCategory;
     }
 
+    /**
+     * Create a {@link DatabaseConnectionData} instance invoke the setup
+     * and add the returned value to the {@link DriverManager}.
+     *
+     * @throws SQLException so have to handle it
+     */
     @Override
     Connection getConnection() throws SQLException {
         DatabaseConnectionData dbConn = new DatabaseConnectionData("connection.properties");

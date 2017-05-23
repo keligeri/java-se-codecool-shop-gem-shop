@@ -16,6 +16,11 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
     ProductDaoImplJdbc productJdbc = new ProductDaoImplJdbc();
     LineItemDaoImplJdbc lineItemJdbc = new LineItemDaoImplJdbc();
 
+    /**
+     * Added the given {@link Order} to the database.
+     *
+     * @param order the added {@link Order}
+     */
     @Override
     public void add(Order order) {
         String query = "INSERT INTO orders (status_name" +
@@ -34,6 +39,11 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
         }
     }
 
+    /**
+     * Find the {@link LineItem} with the given id from the database.
+     *
+     * @param order_id the {@link Order}'s id
+     */
     public List<LineItem> findLineItems(int order_id) {
         List<LineItem> results = new ArrayList<>();
         String query = "SELECT * FROM Line_items WHERE order_id = ?;";
@@ -59,6 +69,11 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
         }
     }
 
+    /**
+     * Find the {@link Order} with the given id from the database.
+     *
+     * @param id the {@link Order}'s id
+     */
     @Override
     public Order find(int id) {
         String query = "SELECT * FROM orders WHERE id = ?;";
@@ -83,6 +98,11 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
         }
     }
 
+    /**
+     * Remove the {@link Order} with the given id from the database.
+     *
+     * @param id the {@link Order}'s id
+     */
     @Override
     public void remove(int id) {
         String query = "DELETE FROM orders WHERE id = ?;";
@@ -104,6 +124,11 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
         }
     }
 
+    /**
+     * Get all {@link Order} int a List from the database.
+     *
+     * @return the all {@link Order} from the database
+     */
     @Override
     public List<Order> getAll() {
         List<Order> results = new ArrayList<>();
@@ -129,6 +154,12 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
         }
     }
 
+    /**
+     * Create a {@link DatabaseConnectionData} instance invoke the setup
+     * and add the returned value to the {@link DriverManager}.
+     *
+     * @throws SQLException so have to handle it
+     */
     @Override
     Connection getConnection() throws SQLException {
         DatabaseConnectionData dbConn = new DatabaseConnectionData("connection.properties");
@@ -137,29 +168,5 @@ public class OrderDaoJdbc extends JdbcDao implements OrderDao {
                 dbConn.getDbUser(),
                 dbConn.getDbPassword());
     }
-
-//    public static void main(String[] args) throws SQLException {
-//        OrderDaoJdbc shop = new OrderDaoJdbc();
-//        Supplier supplierExample = new Supplier("ebay", "ebay_desc");
-//        supplierExample.setId(1);
-//        ProductCategory productCategoryExample = new ProductCategory("sport", "department",
-//                "description");
-//        productCategoryExample.setId(2);
-//        Product productExample = new Product("prod_example", 123,
-//                "USD","desc",
-//                productCategoryExample, supplierExample);
-//        LineItem lineItemOne = new LineItem(productExample);
-//        LineItem lineItemTwo = new LineItem(productExample);
-//        List<LineItem> lineItemListExample = new ArrayList<>();
-//        lineItemListExample.add(lineItemOne);
-//        lineItemListExample.add(lineItemTwo);
-//        Order order = new Order("jh", lineItemListExample);
-//        Order orderTwo = new Order("kh", lineItemListExample);
-//        shop.add(order);
-//        System.out.println(shop.find(2));
-//        shop.remove(1);
-//        System.out.println(shop.getAll());
-//    }
-
 
 }
